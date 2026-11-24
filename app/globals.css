@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+/*
+ * Brand theme: teal green + navy blue.
+ * Teal is the action colour (buttons, links, focus, success).
+ * Navy is the structure colour (sidebar, headings, body text).
+ * Tailwind's built-in `teal-*` scale is used for teal; `navy-*` is defined here.
+ */
+@theme {
+  --color-navy-50: #eef3fa;
+  --color-navy-100: #d6e1f0;
+  --color-navy-200: #aec3e0;
+  --color-navy-300: #7f9dc9;
+  --color-navy-400: #5476ad;
+  --color-navy-500: #3a5a92;
+  --color-navy-600: #2c4677;
+  --color-navy-700: #223760;
+  --color-navy-800: #1a2b4c;
+  --color-navy-900: #12203a;
+  --color-navy-950: #0b1628;
+
+  --color-brand: #0d9488; /* teal-600 */
+  --color-brand-dark: #0f766e; /* teal-700 */
+  --color-ink: #12203a; /* navy-900 */
+}
+
+:root {
+  --background: #f5f8fb;
+  --foreground: #12203a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: #99f6e4; /* teal-200 */
+  color: #12203a;
+}
+
+/* Consistent teal focus ring for every interactive element */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid #14b8a6;
+  outline-offset: 2px;
+}
