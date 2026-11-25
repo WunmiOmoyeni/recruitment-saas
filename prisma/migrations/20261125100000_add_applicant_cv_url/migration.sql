@@ -1,0 +1,2 @@
+ALTER TABLE "Applicant"
+ADD COLUMN "cvUrl" TEXT;

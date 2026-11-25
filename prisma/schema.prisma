@@ -230,6 +230,14 @@ enum ApplicantSource {
   MANUAL
 }
 
+enum CvExtractionStatus {
+  NOT_STARTED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+
 model Applicant {
   id             String          @id @default(cuid())
   organizationId String
@@ -239,8 +247,24 @@ model Applicant {
   email          String
   phone          String?
   experience     String?
-  cvUrl          String? // file lives in storage, not the database
-  cvText         String? // extracted text, used for AI screening
+
+  // CV storage
+  cvUrl          String?
+  cvStorageKey   String?
+  cvOriginalName String?
+  cvMimeType     String?
+  cvSizeBytes    Int?
+
+  // Professional profiles
+  linkedinUrl    String?
+  portfolioUrl   String?
+
+  // CV extraction and screening
+  cvText              String?             @db.Text
+  cvExtractionStatus  CvExtractionStatus  @default(NOT_STARTED)
+  cvExtractionError   String?
+  cvExtractedAt       DateTime?
+
   source         ApplicantSource @default(APPLICATION_SITE)
   aiScore        Int?
   aiSummary      String?
@@ -248,8 +272,8 @@ model Applicant {
   createdAt      DateTime        @default(now())
 
   organization Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  job          Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  stage        PipelineStage  @relation(fields: [stageId], references: [id])
+  job          Job             @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  stage        PipelineStage   @relation(fields: [stageId], references: [id])
   history      StageHistory[]
   emails       EmailLog[]
 

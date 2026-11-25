@@ -62,6 +62,15 @@ export default async function DashboardPage() {
   ];
 
   return (
+     <Suspense
+      fallback={
+        <div className="space-y-4">
+          <div className="h-10 animate-pulse rounded-lg bg-gray-100" />
+          <div className="h-32 animate-pulse rounded-lg bg-gray-100" />
+          <div className="h-64 animate-pulse rounded-lg bg-gray-100" />
+        </div>
+      }
+    >
     <div className="space-y-8">
       <PageHeader
         title={`Welcome back to ${org.name}`}
@@ -194,5 +203,7 @@ export default async function DashboardPage() {
         </Card>
       </div>
     </div>
+
+    </Suspense>
   );
 }

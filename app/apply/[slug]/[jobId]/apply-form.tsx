@@ -35,23 +35,39 @@ export function ApplyForm({
   }
 
   return (
-    <form action={formAction} className="space-y-5">
-      <ApplicantFields values={state.values} />
-      {/* Honeypot for bots — hidden from people and screen readers */}
-      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
-        <label>
-          Website <input name="website" tabIndex={-1} autoComplete="off" />
-        </label>
-      </div>
-      {state.error && (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 ring-1 ring-red-100">{state.error}</p>
-      )}
-      <button type="submit" disabled={pending} className="inline-flex w-full items-center justify-center rounded-lg bg-teal-600 px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50">
-        {pending ? "Submitting…" : "Submit application"}
-      </button>
-      <p className="text-center text-xs text-navy-400">
-        Your details are shared only with the hiring team at this company.
-      </p>
-    </form>
+   <form action={formAction} className="space-y-8">
+  <ApplicantFields values={state.values} />
+
+  {/* Honeypot for bots */}
+  <div
+    aria-hidden="true"
+    className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+  >
+    <label>
+      Website
+      <input name="website" tabIndex={-1} autoComplete="off" />
+    </label>
+  </div>
+
+  {state.error && (
+    <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 ring-1 ring-red-100">
+      {state.error}
+    </p>
+  )}
+
+  <div className="border-t border-navy-100 pt-6">
+    <button
+      type="submit"
+      disabled={pending}
+      className="inline-flex w-full items-center justify-center rounded-lg bg-teal-600 px-6 py-3.5 text-base font-semibold text-white shadow-sm transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:min-w-56"
+    >
+      {pending ? "Submitting…" : "Submit application"}
+    </button>
+
+    <p className="mt-4 text-xs text-navy-400">
+      Your details are shared only with the hiring team at this company.
+    </p>
+  </div>
+</form>
   );
 }
