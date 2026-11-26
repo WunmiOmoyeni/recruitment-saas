@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react"; 
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { canManageJobs } from "@/lib/permissions";
@@ -24,6 +25,15 @@ export default async function EditJobPage({
   if (!job) notFound();
 
   return (
+    <Suspense
+          fallback={
+            <div className="space-y-4">
+              <div className="h-10 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-32 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-64 animate-pulse rounded-lg bg-gray-100" />
+            </div>
+          }
+        >
     <div className="mx-auto max-w-3xl space-y-6">
       <Link href={`/jobs/${job.id}`} className={`text-sm ${ui.link}`}>← Back to job</Link>
       <PageHeader title="Edit job" subtitle={job.title} />
@@ -34,5 +44,6 @@ export default async function EditJobPage({
         cancelHref={`/jobs/${job.id}`}
       />
     </div>
+    </Suspense>
   );
 }

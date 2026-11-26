@@ -230,14 +230,6 @@ enum ApplicantSource {
   MANUAL
 }
 
-enum CvExtractionStatus {
-  NOT_STARTED
-  PROCESSING
-  COMPLETED
-  FAILED
-}
-
-
 model Applicant {
   id             String          @id @default(cuid())
   organizationId String
@@ -247,24 +239,11 @@ model Applicant {
   email          String
   phone          String?
   experience     String?
-
-  // CV storage
-  cvUrl          String?
-  cvStorageKey   String?
-  cvOriginalName String?
-  cvMimeType     String?
-  cvSizeBytes    Int?
-
-  // Professional profiles
-  linkedinUrl    String?
-  portfolioUrl   String?
-
-  // CV extraction and screening
-  cvText              String?             @db.Text
-  cvExtractionStatus  CvExtractionStatus  @default(NOT_STARTED)
-  cvExtractionError   String?
-  cvExtractedAt       DateTime?
-
+  portfolioUrl   String? @map("cvUrl") // LinkedIn / portfolio link given by the candidate
+  cvPath         String? // storage pathname of the uploaded CV, never a public URL
+  cvType         String? // validated content type (pdf or docx)
+  cvText         String? // extracted text, used for screening
+  consentAt      DateTime? // when the candidate agreed to data processing
   source         ApplicantSource @default(APPLICATION_SITE)
   aiScore        Int?
   aiSummary      String?
@@ -272,11 +251,12 @@ model Applicant {
   createdAt      DateTime        @default(now())
 
   organization Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  job          Job             @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  stage        PipelineStage   @relation(fields: [stageId], references: [id])
+  job          Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  stage        PipelineStage  @relation(fields: [stageId], references: [id])
   history      StageHistory[]
   emails       EmailLog[]
 
+  @@unique([jobId, email])
   @@index([organizationId, stageId])
   @@index([organizationId, jobId])
 }

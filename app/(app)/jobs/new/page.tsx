@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import {Suspense} from "react";
+import {redirect } from "next/navigation";
 import { canManageJobs } from "@/lib/permissions";
 import { requireRecruitment } from "@/lib/tenant";
 import { PageHeader, ui } from "@/components/ui";
@@ -14,6 +15,15 @@ export default async function NewJobPage() {
   if (!canManageJobs(role)) redirect("/jobs");
 
   return (
+    <Suspense
+          fallback={
+            <div className="space-y-4">
+              <div className="h-10 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-32 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-64 animate-pulse rounded-lg bg-gray-100" />
+            </div>
+          }
+        >
     <div className="mx-auto max-w-3xl space-y-6">
       <Link href="/jobs" className={`text-sm ${ui.link}`}>← Back to jobs</Link>
       <PageHeader
@@ -22,5 +32,6 @@ export default async function NewJobPage() {
       />
       <JobForm action={createJob} submitLabel="Create job" />
     </div>
+    </Suspense>
   );
 }

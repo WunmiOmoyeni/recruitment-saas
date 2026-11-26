@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { canManageJobs } from "@/lib/permissions";
 import { requireRecruitment } from "@/lib/tenant";
@@ -49,6 +50,15 @@ export default async function JobsPage({
       : counts.find((c) => c.status === k)?._count._all ?? 0;
 
   return (
+    <Suspense
+          fallback={
+            <div className="space-y-4">
+              <div className="h-10 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-32 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-64 animate-pulse rounded-lg bg-gray-100" />
+            </div>
+          }
+        >
     <div className="space-y-6">
       <PageHeader
         title="Jobs"
@@ -142,5 +152,6 @@ export default async function JobsPage({
         </div>
       )}
     </div>
+    </Suspense>
   );
 }

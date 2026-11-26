@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { canDeleteApplicants } from "@/lib/permissions";
@@ -55,6 +56,15 @@ export default async function ApplicantPage({ params }: { params: Promise<{ id: 
   ]);
 
   return (
+      <Suspense
+          fallback={
+            <div className="space-y-4">
+              <div className="h-10 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-32 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-64 animate-pulse rounded-lg bg-gray-100" />
+            </div>
+          }
+        >
     <div className="space-y-6">
       <Link href="/applicants" className={`text-sm ${ui.link}`}>← All applicants</Link>
 
@@ -75,9 +85,9 @@ export default async function ApplicantPage({ params }: { params: Promise<{ id: 
               <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm">
                 <a href={`mailto:${applicant.email}`} className={ui.link}>{applicant.email}</a>
                 {applicant.phone && <a href={`tel:${applicant.phone}`} className={ui.link}>{applicant.phone}</a>}
-                {applicant.cvUrl && (
-                  <a href={applicant.cvUrl} target="_blank" rel="noopener noreferrer nofollow" className={ui.link}>
-                    CV / profile ↗
+                {applicant.cvPath && (
+                  <a href={`/api/cv/${applicant.id}`} className={ui.link}>
+                    Download CV ↓
                   </a>
                 )}
               </div>
@@ -147,14 +157,15 @@ export default async function ApplicantPage({ params }: { params: Promise<{ id: 
           </Card>
 
           <Card title="CV / résumé">
-            {applicant.cvText ? (
-              <pre className="max-h-[28rem] overflow-auto whitespace-pre-wrap rounded-lg bg-navy-50 p-4 font-mono text-xs leading-relaxed text-navy-800">
+            {applicant.cvPath ? (
+              <a href={`/api/cv/${applicant.id}`} className={ui.btnSecondary}>Download CV</a>
+            ) : (
+              <p className="text-sm text-navy-400">No CV uploaded.</p>
+            )}
+            {applicant.cvText && (
+              <pre className="mt-4 max-h-[28rem] overflow-auto whitespace-pre-wrap rounded-lg bg-navy-50 p-4 font-mono text-xs leading-relaxed text-navy-800">
                 {applicant.cvText}
               </pre>
-            ) : (
-              <p className="text-sm text-navy-400">
-                No CV text.{applicant.cvUrl ? " See the linked CV above." : ""}
-              </p>
             )}
           </Card>
 
@@ -211,5 +222,6 @@ export default async function ApplicantPage({ params }: { params: Promise<{ id: 
         </div>
       </div>
     </div>
+    </Suspense>
   );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
@@ -44,6 +45,15 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
   const publicUrl = `/apply/${org.slug}/${job.id}`;
 
   return (
+    <Suspense
+          fallback={
+            <div className="space-y-4">
+              <div className="h-10 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-32 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-64 animate-pulse rounded-lg bg-gray-100" />
+            </div>
+          }
+        >
     <div className="space-y-6">
       <Link href="/jobs" className={`text-sm ${ui.link}`}>← All jobs</Link>
 
@@ -172,5 +182,6 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
         </div>
       </div>
     </div>
+    </Suspense>
   );
 }

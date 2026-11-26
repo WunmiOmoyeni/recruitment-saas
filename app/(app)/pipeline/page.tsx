@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { requireRecruitment } from "@/lib/tenant";
 import { tenantDb } from "@/lib/tenant-db";
@@ -28,6 +29,15 @@ export default async function PipelinePage({
   ]);
 
   return (
+    <Suspense
+          fallback={
+            <div className="space-y-4">
+              <div className="h-10 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-32 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-64 animate-pulse rounded-lg bg-gray-100" />
+            </div>
+          }
+        >
     <div className="space-y-6">
       <PageHeader
         title="Pipeline"
@@ -61,5 +71,6 @@ export default async function PipelinePage({
         }))}
       />
     </div>
+    </Suspense>
   );
 }

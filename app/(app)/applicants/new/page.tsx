@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import {Suspense} from "react";
 import Link from "next/link";
 import { requireRecruitment } from "@/lib/tenant";
 import { tenantDb } from "@/lib/tenant-db";
@@ -20,6 +21,15 @@ export default async function NewApplicantPage({
   });
 
   return (
+     <Suspense
+          fallback={
+            <div className="space-y-4">
+              <div className="h-10 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-32 animate-pulse rounded-lg bg-gray-100" />
+              <div className="h-64 animate-pulse rounded-lg bg-gray-100" />
+            </div>
+          }
+        >
     <div className="mx-auto max-w-3xl space-y-6">
       <Link href="/applicants" className={`text-sm ${ui.link}`}>← Back to applicants</Link>
       <PageHeader
@@ -32,5 +42,6 @@ export default async function NewApplicantPage({
         <NewApplicantForm jobs={jobs} defaultJobId={jobs.some((j) => j.id === job) ? job : undefined} />
       )}
     </div>
+    </Suspense>
   );
 }
